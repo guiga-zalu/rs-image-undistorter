@@ -1,0 +1,54 @@
+"medida := 100² int_0^1 ( z(x) )² dx
+"medida < 1: boa
+
+M_{x}(p) = LERP(
+    lado_esq(p.y),
+    lado_dir(p.y),
+    UNLERP(lagr_esq(p.y), lagr_dir(p.y), p.x)
+)
+M_{y}(p) = LERP(
+    lado_base(p.x),
+    lado_topo(p.x),
+    UNLERP(lagr_base(p.x), lagr_topo(p.x), p.y)
+)
+
+
+s=x\left\{0\le x\le1\right\}
+q=y\left\{0\le y\le1\right\}
+LERP\left(a,b,t\right)=a+\left(b-a\right)t
+UNLERP\left(a,b,c\right)=\frac{c-a}{b-a}
+L\left(x,p\right)=\sum_{n=1}^{p.\operatorname{length}}\left(p\left[n\right].y\cdot\prod_{m=1}^{p.\operatorname{length}}\left\{n=m:1,\frac{x-p\left[m\right].x}{p\left[n\right].x-p\left[m\right].x}\right\}\right)
+P_{base}=\left[\left(.1,.1\right),\left(.8,.15\right),\left(.35,.2\right),\left(0.6,.18\right)\right]
+P_{topo}=\left[\left(.1,.9\right),\left(.7,.85\right),\left(.45,.85\right),\left(0.9,.88\right)\right]
+P_{esq}=\left[\left(.1,.1\right),\left(.12,.5\right),\left(.1,.9\right)\right]
+P_{dir}=\left[\left(.8,.15\right),\left(.9,.88\right),\left(.8,.5\right)\right]
+P_{basexmin}=\min\left(P_{base}.x\right)
+P_{basexmax}=\max\left(P_{base}.x\right)
+P_{basexdelta}=P_{basexmax}-P_{basexmin}
+P_{baseymin}=\min\left(P_{base}.y\right)
+P_{baseymax}=\max\left(P_{base}.y\right)
+P_{baseydelta}=P_{baseymax}-P_{baseymin}
+P_{topoxmin}=\min\left(P_{topo}.x\right)
+P_{topoxdelta}=\max\left(P_{topo}.x\right)-P_{topoxmin}
+P_{topoymin}=\min\left(P_{topo}.y\right)
+P_{topoydelta}=\max\left(P_{topo}.y\right)-P_{topoymin}
+P_{esqxmin}=\min\left(P_{esq}.x\right)
+P_{esqxdelta}=\max\left(P_{esq}.x\right)-P_{esqxmin}
+P_{esqymin}=\min\left(P_{esq}.y\right)
+P_{esqydelta}=\max\left(P_{esq}.y\right)
+P_{dirxmin}=\min\left(P_{dir}.x\right)
+P_{dirxdelta}=\max\left(P_{dir}.x\right)-P_{dirxmin}
+P_{dirymin}=\min\left(P_{dir}.y\right)
+P_{dirydelta}=\max\left(P_{dir}.y\right)-P_{dirymin}
+H_{0}\left(x\right)=L\left(s,P_{base}\right)
+H_{1}\left(x\right)=L\left(s,P_{topo}\right)
+V_{0}\left(y\right)=L\left(y,\left(P_{esq}.y,P_{esq}.x\right)\right)
+V_{1}\left(y\right)=L\left(y,\left(P_{dir}.y,P_{dir}.x\right)\right)
+B_{0}\left(x\right)=\left(H_{0}\left(sP_{basexdelta}+P_{basexmin}\right)-P_{baseymin}\right)P_{baseydelta}
+B_{1}\left(x\right)=\left(H_{1}\left(sP_{topoxdelta}+P_{topoxmin}\right)-P_{topoymin}\right)P_{topoydelta}+1
+C_{0}\left(y\right)=\left(V_{0}\left(qP_{esqydelta}+P_{esqymin}\right)-P_{esqxmin}\right)P_{esqydelta}
+C_{1}\left(y\right)=\left(V_{0}\left(qP_{dirydelta}+P_{dirymin}\right)-P_{dirxmin}\right)P_{dirydelta}+1.5
+"medida := 100² int_0^1 ( z(x) )² dx
+"medida < 1: boa
+M_{x}\left(p\right)=C_{0}\left(p.y\right)+\left(C_{1}\left(p.y\right)-C_{0}\left(p.y\right)\right)UNLERP\left(V_{0}\left(p.y\right),V_{1}\left(p.y\right),p.x\right)
+M_{y}\left(p\right)=B_{0}\left(p.x\right)+\left(B_{1}\left(p.x\right)-B_{0}\left(p.x\right)\right)UNLERP\left(H_{0}\left(p.x\right),H_{1}\left(p.x\right),p.y\right)

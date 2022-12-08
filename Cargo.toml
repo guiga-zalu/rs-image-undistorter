@@ -1,0 +1,19 @@
+[package]
+name = "image_undistorter"
+version = "0.1.0"
+edition = "2021"
+authors = [
+	"Guilherme Zaluchi <dev@guilherme.zaluchi.com.br>"
+]
+im-a-teapot = false
+keywords = ["image", "graphics"]
+publish = false
+readme = "readme.MD"
+repository = "https://github.com/guiga-zalu/rs-image-undistorter"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+image = "0.24"
+polynomial = "0.2.4"
+num-traits = "0.2"
